@@ -2,15 +2,21 @@
 
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import pandas as pd
+import yfinance as yf
+import requests
+from bs4 import BeautifulSoup
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def get_sp500_instruments():
+    res = requests.get("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
+    soup = BeautifulSoup(res.content, 'lxml')
+    table = soup.find_all('table')[0]
+    df = pd.read_html(str(table))
+    return list(df[0]['Symbol'])
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+# if __name__ == '__main__':
+tickers = get_sp500_instruments()
+print(tickers)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
