@@ -1,4 +1,4 @@
-'''The main driver file.'''
+
 import pandas as pd
 import yfinance as yf
 import requests
@@ -69,7 +69,7 @@ def format_date(date):
 
 
 #df.to_excel("./Data/hist.xlsx")
-print(df)
+#print(df)
 
 
 
