@@ -1,7 +1,4 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+'''The main driver file.'''
 import pandas as pd
 import yfinance as yf
 import requests
@@ -15,8 +12,36 @@ def get_sp500_instruments():
     df = pd.read_html(str(table))
     return list(df[0]['Symbol'])
 
+def get_sp500_df():
+    symbols = get_sp500_instruments()
+    symbols = symbols[:30]
+    ohlcvs = {}
+    for symbol in symbols:
+        symbol_df = yf.Ticker(symbol).history(period="5y")
+        ohlcvs[symbol] = symbol_df[["Open", "High", "Low", "Close"]].rename(
+            columns = {
+                "Open": "open",
+                "High": "high",
+                "Low": "low",
+                "Close": "close"
+            }
+        )
+        print(symbol)
+        print(ohlcvs[symbol])
+    df = pd.DataFrame(index = ohlcvs["GOOGL"].index)
+    df.index.name = "date"
+    instruments = list(ohlcvs.keys())
+
+    for inst in instruments:
+        inst_df = ohlcvs[inst]
+        columns = list(map(lambda x: "{} {}".format(inst, x), inst_df.columns))
+        df[columns] = inst_df
+
+    return df, instruments
+
+
 
 # if __name__ == '__main__':
-tickers = get_sp500_instruments()
-print(tickers)
+df, instruments = get_sp500_df()
+#df.to_excel("./Data/sp500_data.xlsx")
 
