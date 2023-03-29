@@ -3,6 +3,8 @@
 # (96, 108)]
 import json
 import PTLIB.indicator_util as indicator
+import pandas as pd
+
 class LBMOM:
 
     def __init__(self, instruments_config, historical_df, simulation_start, vol_target):
@@ -26,17 +28,22 @@ class LBMOM:
                 n=14
             )
             for pair in self.pairs:
-                historical_data["{} ema{}".format(inst, str(pair))] = \
-                    indicator.ema_series(historical_data["{} close".format(inst)], n=pair[0]) - \
-                    indicator.ema_series((historical_data["{} close".format(inst)], n=pair[1])
+                historical_data["{} ema{}".format(inst, str(pair))] = indicator.ema_series(historical_data["{} close".format(inst)],
+                        n=pair[0]) - indicator.ema_series(historical_data["{} close".format(inst)], n=pair[1])
 
         return historical_data
 
 
     def run_simulation(self, historical_data):
-        pass
+        historical_data= self.instruments_config["instruments"]
+
+        historical_data = self.extend_historicals(instruments=instruments, historical_data=historical_data)
+        print(historical_data)
+        portfolio_df = pd.DataFrame(index=historical_data[self.simulation_start:].reset_index())
+        portfolio_df.loc[0, "capital"] = 10000
+        print(portfolio_df)
 
     def get_subsys_pos(self):
-        pass
+        self.run_simulation(historical_data=self.historical_df)
 
 
