@@ -12,5 +12,5 @@ def adx_series(high, low, close, n):
 def ema_series(series, n):
     return talib.EMA(series, timeperiod=n)
 
-def sma_series(series, timeperiod=n):
+def sma_series(series, n):
     return talib.SMA(series, timeperiod=n)

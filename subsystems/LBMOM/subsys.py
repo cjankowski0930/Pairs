@@ -2,8 +2,11 @@
 # (43, 214), (61, 205), (40, 62), (64, 66), (49, 167), (21, 182), (230, 284), (116, 192), (220, 298), (146, 239),
 # (96, 108)]
 import json
+import PTLIB
 import PTLIB.indicator_util as indicator
 import pandas as pd
+import PTLIB.data
+
 
 class LBMOM:
 
@@ -35,11 +38,10 @@ class LBMOM:
 
 
     def run_simulation(self, historical_data):
-        historical_data= self.instruments_config["instruments"]
+        instruments = self.instruments_config["instruments"]
 
         historical_data = self.extend_historicals(instruments=instruments, historical_data=historical_data)
-        print(historical_data)
-        portfolio_df = pd.DataFrame(index=historical_data[self.simulation_start:].reset_index())
+        portfolio_df = pd.DataFrame(index=historical_data[self.simulation_start:].index).reset_index()
         portfolio_df.loc[0, "capital"] = 10000
         print(portfolio_df)
 

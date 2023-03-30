@@ -18,7 +18,7 @@ def get_sp500_df():
     symbols = symbols[:30]
     ohlcvs = {}
     for symbol in symbols:
-        symbol_df = yf.Ticker(symbol).history(period="5y")
+        symbol_df = yf.Ticker(symbol).history(period="10y")
         ohlcvs[symbol] = symbol_df[["Open", "High", "Low", "Close", "Volume"]].rename(
             columns = {
                 "Open": "open",
@@ -28,8 +28,8 @@ def get_sp500_df():
                 "Volume": "volume"
             }
         )
-        print(symbol)
-        print(ohlcvs[symbol])
+        # print(symbol)
+        # print(ohlcvs[symbol])
     df = pd.DataFrame(index = ohlcvs["GOOGL"].index)
     df.index.name = "date"
     instruments = list(ohlcvs.keys())
@@ -60,16 +60,10 @@ def extend_dataframe(traded, df):
 
 def format_date(date):
     yymmdd = list(map(lambda x: int(x), str(date).split(" ")[0].split("-")))
-    return datetime.date(yymmdd[0],yymmdd[1], yymmdd[2]
-                         )
-# df, instruments = get_sp500_df()
-# df.to_excel("./Data/hist.xlsx")
-# df = extend_dataframe(traded=instruments, df=df)
-#df = pd.read_excel("./Data.hist.xlsx").set_index("date")
+    return datetime.date(yymmdd[0],yymmdd[1], yymmdd[2] )
 
-
-#df.to_excel("./Data/hist.xlsx")
-#print(df)
+symbols = get_sp500_instruments()
+df, instruments = get_sp500_df()
 
 
 
